@@ -248,7 +248,11 @@ export default function UserDetailPage() {
                               : "bg-amber-100 text-amber-700"
                           )}
                         >
-                          {p.status === "paid" ? "Pago" : "Gerado (paywall)"}
+                          {p.status === "paid"
+                          ? "Pago"
+                          : p.status === "pending"
+                            ? "Checkout pendente"
+                            : "Gerado"}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-gray-400 text-xs">

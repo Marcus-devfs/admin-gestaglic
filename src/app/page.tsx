@@ -74,9 +74,9 @@ export default function DashboardPage() {
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Financeiro</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
-            label="Pix gerados (R$ 9,90)"
+            label="Checkouts pendentes"
             value={metrics.financial.generated}
-            sub="Viram o paywall"
+            sub="Aguardando pagamento Asaas"
             icon={DollarSign}
             accent="amber"
           />

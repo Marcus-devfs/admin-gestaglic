@@ -16,7 +16,7 @@ export default function AssinaturasPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const generated = payments.filter((p) => p.status === "generated").length;
+  const pending = payments.filter((p) => p.status === "generated" || p.status === "pending").length;
   const paid = payments.filter((p) => p.status === "paid").length;
 
   if (loading) return <p className="text-sm text-gray-400">Carregando...</p>;
@@ -24,9 +24,9 @@ export default function AssinaturasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Assinaturas & Pix</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Assinaturas & Pagamentos</h1>
         <p className="text-sm text-gray-500">
-          {generated} gerados · {paid} pagos · {formatCurrency(paid * 9.9)} receita
+          {pending} pendentes · {paid} pagos · {formatCurrency(paid * 9.9)} receita
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default function AssinaturasPage() {
                             : "bg-amber-100 text-amber-700"
                         }`}
                       >
-                        {p.status === "paid" ? "Pago" : "Gerado"}
+                        {p.status === "paid" ? "Pago" : p.status === "pending" ? "Pendente" : "Gerado"}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-400 text-xs">
@@ -84,8 +84,8 @@ export default function AssinaturasPage() {
       </div>
 
       <p className="text-xs text-gray-400">
-        Pix &ldquo;gerado&rdquo; = usuária atingiu o limite de PDFs gratuitos. Marque como premium em
-        Usuárias após confirmar o pagamento.
+        Pagamentos via Asaas. &ldquo;Pendente&rdquo; = checkout criado, aguardando Pix. Premium é
+        liberado automaticamente pelo webhook após confirmação.
       </p>
     </div>
   );

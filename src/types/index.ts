@@ -62,7 +62,7 @@ export interface PixPayment {
   _id: string;
   userId: { _id: string; name: string; email: string } | string;
   amount: number;
-  status: "generated" | "paid";
+  status: "generated" | "pending" | "paid" | "expired" | "cancelled";
   createdAt: string;
   paidAt?: string;
 }
