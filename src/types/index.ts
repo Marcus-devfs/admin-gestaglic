@@ -90,3 +90,39 @@ export interface UserDetailResponse {
     pdfDownloads: number;
   };
 }
+
+export interface Article {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  category: string;
+  readMinutes: number;
+  published: boolean;
+  publishedAt?: string;
+  createdAt: string;
+}
+
+export interface ForumPostAdmin {
+  _id: string;
+  title: string;
+  body: string;
+  category: string;
+  likesCount: number;
+  commentsCount: number;
+  hidden: boolean;
+  reportCount: number;
+  userId: { _id: string; name: string; email: string };
+  createdAt: string;
+}
+
+export interface ForumReport {
+  _id: string;
+  targetType: "post" | "comment";
+  reason: string;
+  status: "pending" | "resolved" | "dismissed";
+  reporterId: { name: string; email: string };
+  postId: { title: string; category: string };
+  createdAt: string;
+}

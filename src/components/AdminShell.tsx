@@ -9,6 +9,8 @@ import {
   CreditCard,
   Bell,
   LogOut,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 import { APP_ICON, APP_NAME } from "@/lib/brand";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +19,8 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/usuarios", label: "Usuários", icon: Users },
+  { href: "/conteudo", label: "Conteúdo", icon: FileText },
+  { href: "/comunidade", label: "Comunidade", icon: MessageSquare },
   { href: "/assinaturas", label: "Assinaturas", icon: CreditCard },
   { href: "/notificacoes", label: "Notificações", icon: Bell },
 ];
