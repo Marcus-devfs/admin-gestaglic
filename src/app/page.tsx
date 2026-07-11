@@ -74,30 +74,30 @@ export default function DashboardPage() {
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Financeiro</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
-            label="Checkouts pendentes"
-            value={metrics.financial.generated}
-            sub="Aguardando pagamento Asaas"
+            label="A receber (bruto)"
+            value={formatCurrency(metrics.financial.pendingGross)}
+            sub={`${metrics.financial.pendingCount} checkout${metrics.financial.pendingCount === 1 ? "" : "s"} pendente${metrics.financial.pendingCount === 1 ? "" : "s"}`}
             icon={DollarSign}
             accent="amber"
           />
           <MetricCard
-            label="Pix pagos"
-            value={metrics.financial.paid}
-            sub={`${metrics.financial.premiumUsers} premium`}
+            label="Recebido bruto"
+            value={formatCurrency(metrics.financial.revenue)}
+            sub={`${metrics.financial.paid} pagamento${metrics.financial.paid === 1 ? "" : "s"} confirmado${metrics.financial.paid === 1 ? "" : "s"}`}
+            icon={DollarSign}
+          />
+          <MetricCard
+            label="Recebido líquido"
+            value={formatCurrency(metrics.financial.revenueNet)}
+            sub={`Taxas ${formatCurrency(metrics.financial.asaasFees)}`}
             icon={DollarSign}
             accent="green"
           />
-          <MetricCard
-            label="Receita"
-            value={formatCurrency(metrics.financial.revenue)}
-            sub="Confirmados"
-            icon={DollarSign}
-          />
           <Link href="/assinaturas">
             <MetricCard
-              label="Assinaturas"
+              label="Financeiro"
               value="→"
-              sub="Ver detalhes"
+              sub="Ver detalhes e histórico"
               icon={DollarSign}
               accent="blue"
             />

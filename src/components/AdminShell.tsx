@@ -21,7 +21,7 @@ const NAV = [
   { href: "/usuarios", label: "Usuários", icon: Users },
   { href: "/conteudo", label: "Conteúdo", icon: FileText },
   { href: "/comunidade", label: "Comunidade", icon: MessageSquare },
-  { href: "/assinaturas", label: "Assinaturas", icon: CreditCard },
+  { href: "/assinaturas", label: "Financeiro", icon: CreditCard },
   { href: "/notificacoes", label: "Notificações", icon: Bell },
 ];
 

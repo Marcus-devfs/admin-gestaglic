@@ -1,3 +1,19 @@
+export interface FinancialSummary {
+  pixPrice: number;
+  received: {
+    gross: number;
+    net: number;
+    fees: number;
+    count: number;
+    syncedCount: number;
+  };
+  pending: {
+    gross: number;
+    count: number;
+  };
+  premiumUsers: number;
+}
+
 export interface DashboardMetrics {
   users: { total: number; newLast7Days: number };
   infra: {
@@ -24,6 +40,11 @@ export interface DashboardMetrics {
     generated: number;
     paid: number;
     revenue: number;
+    revenueNet: number;
+    asaasFees: number;
+    paidWithFeesSynced: number;
+    pendingGross: number;
+    pendingCount: number;
     premiumUsers: number;
   };
   notifications: {
@@ -62,6 +83,9 @@ export interface PixPayment {
   _id: string;
   userId: { _id: string; name: string; email: string } | string;
   amount: number;
+  netAmount?: number | null;
+  feeAmount?: number | null;
+  paymentMethod?: "pix" | "card";
   status: "generated" | "pending" | "paid" | "expired" | "cancelled";
   createdAt: string;
   paidAt?: string;

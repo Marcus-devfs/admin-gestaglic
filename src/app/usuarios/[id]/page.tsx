@@ -227,9 +227,10 @@ export default function UserDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 text-left text-xs text-gray-500 uppercase">
-                    <th className="px-4 py-3">Valor</th>
+                    <th className="px-4 py-3">Bruto</th>
+                    <th className="px-4 py-3">Taxa</th>
+                    <th className="px-4 py-3">Líquido</th>
                     <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Criado</th>
                     <th className="px-4 py-3">Pago em</th>
                   </tr>
                 </thead>
@@ -238,6 +239,12 @@ export default function UserDetailPage() {
                     <tr key={p._id} className="border-b border-gray-50 last:border-0">
                       <td className="px-4 py-3 font-medium">
                         {formatCurrency(p.amount)}
+                      </td>
+                      <td className="px-4 py-3 text-red-600">
+                        {p.feeAmount != null ? `-${formatCurrency(p.feeAmount)}` : "—"}
+                      </td>
+                      <td className="px-4 py-3 font-medium text-green-700">
+                        {p.netAmount != null ? formatCurrency(p.netAmount) : "—"}
                       </td>
                       <td className="px-4 py-3">
                         <span
@@ -254,9 +261,6 @@ export default function UserDetailPage() {
                             ? "Checkout pendente"
                             : "Gerado"}
                         </span>
-                      </td>
-                      <td className="px-4 py-3 text-gray-400 text-xs">
-                        {formatDateBR(p.createdAt)}
                       </td>
                       <td className="px-4 py-3 text-gray-400 text-xs">
                         {p.paidAt ? formatDateBR(p.paidAt) : "—"}
