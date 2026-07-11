@@ -18,6 +18,9 @@ export default function AssinaturasPage() {
 
   const pending = payments.filter((p) => p.status === "generated" || p.status === "pending").length;
   const paid = payments.filter((p) => p.status === "paid").length;
+  const revenue = payments
+    .filter((p) => p.status === "paid")
+    .reduce((sum, p) => sum + (p.amount ?? 0), 0);
 
   if (loading) return <p className="text-sm text-gray-400">Carregando...</p>;
 
@@ -26,7 +29,7 @@ export default function AssinaturasPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Assinaturas & Pagamentos</h1>
         <p className="text-sm text-gray-500">
-          {pending} pendentes · {paid} pagos · {formatCurrency(paid * 9.9)} receita
+          {pending} pendentes · {paid} pagos · {formatCurrency(revenue)} receita
         </p>
       </div>
 
