@@ -9,6 +9,7 @@ import {
   DollarSign,
   ExternalLink,
   Bell,
+  Activity,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { MetricCard } from "@/components/MetricCard";
@@ -110,47 +111,62 @@ export default function DashboardPage() {
           <MetricCard
             label="Documentos MongoDB"
             value={metrics.infra.totalDocuments}
-            sub={`${metrics.infra.users} usuárias · ${metrics.infra.medicoes} medições`}
+            sub={`${metrics.infra.users} usuárias · ${metrics.infra.medicoes} medições · ${metrics.infra.accessLogs} logs`}
             icon={Database}
           />
           <MetricCard
-            label="Uso estimado"
+            label={metrics.infra.storageSource === "mongodb" ? "Armazenamento real" : "Uso estimado"}
             value={`${metrics.infra.estimatedStorageMB} MB`}
-            sub={`${metrics.infra.storageUsagePct}% de ${metrics.infra.mongoLimitMB} MB (M0)`}
+            sub={
+              metrics.infra.dataSizeMB != null
+                ? `${metrics.infra.storageUsagePct}% de ${metrics.infra.mongoLimitMB} MB (M0) · dados ${metrics.infra.dataSizeMB} MB`
+                : `${metrics.infra.storageUsagePct}% de ${metrics.infra.mongoLimitMB} MB (M0)`
+            }
             icon={Database}
             accent={metrics.infra.storageUsagePct > 80 ? "amber" : "blue"}
           />
-          {metrics.infra.vercelAnalyticsUrl ? (
-            <a href={metrics.infra.vercelAnalyticsUrl} target="_blank" rel="noopener noreferrer">
+          <MetricCard
+            label="Atividade (7 dias)"
+            value={metrics.infra.activity.activeUsers7d}
+            sub={`${metrics.infra.activity.logins7d} logins · ${metrics.infra.activity.pdfDownloads7d} PDFs`}
+            icon={Activity}
+            accent="green"
+          />
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <div className="flex-1 min-w-[200px] rounded-xl bg-white border border-gray-100 p-4">
+            <div className="flex justify-between text-xs text-gray-500 mb-2">
+              <span>Armazenamento MongoDB Atlas M0</span>
+              <span>{metrics.infra.storageUsagePct}%</span>
+            </div>
+            <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-brand-500 transition-all"
+                style={{ width: `${metrics.infra.storageUsagePct}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-gray-400 mt-2">
+              {metrics.infra.storageSource === "mongodb"
+                ? "Medido via db.stats() na API — sem depender da Vercel"
+                : "Estimativa por contagem de documentos"}
+            </p>
+          </div>
+          {metrics.infra.vercelAnalyticsUrl && (
+            <a
+              href={metrics.infra.vercelAnalyticsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0"
+            >
               <MetricCard
                 label="Vercel Analytics"
                 value="Abrir →"
-                sub="Métricas de acesso"
+                sub="Tráfego web (opcional)"
                 icon={ExternalLink}
                 accent="blue"
               />
             </a>
-          ) : (
-            <MetricCard
-              label="Vercel Analytics"
-              value="—"
-              sub="Configure VERCEL_ANALYTICS_URL na API"
-              icon={ExternalLink}
-              accent="blue"
-            />
           )}
-        </div>
-        <div className="mt-4 rounded-xl bg-white border border-gray-100 p-4">
-          <div className="flex justify-between text-xs text-gray-500 mb-2">
-            <span>Armazenamento MongoDB Atlas M0</span>
-            <span>{metrics.infra.storageUsagePct}%</span>
-          </div>
-          <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-brand-500 transition-all"
-              style={{ width: `${metrics.infra.storageUsagePct}%` }}
-            />
-          </div>
         </div>
       </section>
 

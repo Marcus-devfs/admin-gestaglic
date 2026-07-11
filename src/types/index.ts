@@ -4,9 +4,19 @@ export interface DashboardMetrics {
     totalDocuments: number;
     users: number;
     medicoes: number;
+    pixPayments: number;
+    accessLogs: number;
     estimatedStorageMB: number;
+    dataSizeMB: number | null;
+    mongoObjects: number | null;
     mongoLimitMB: number;
     storageUsagePct: number;
+    storageSource: "mongodb" | "estimate";
+    activity: {
+      logins7d: number;
+      pdfDownloads7d: number;
+      activeUsers7d: number;
+    };
     vercelAnalyticsUrl: string | null;
   };
   financial: {
