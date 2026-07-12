@@ -18,6 +18,8 @@ export interface PremiumSettings {
   premiumPrice: number;
   freePdfLimit: number;
   updatedAt?: string;
+  asaasMinCharge?: number;
+  asaasSandbox?: boolean;
 }
 
 export interface DashboardMetrics {

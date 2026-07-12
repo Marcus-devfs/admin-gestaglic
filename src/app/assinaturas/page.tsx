@@ -63,8 +63,21 @@ export default function FinanceiroPage() {
       const summaryRes = await api.get<FinancialSummary>("/admin/financial/summary");
       setSummary(summaryRes.data);
       setSettingsMessage("Salvo! Novos checkouts Pix e cartão usarão estes valores.");
-    } catch {
-      setSettingsMessage("Erro ao salvar. Verifique os valores informados.");
+    } catch (err: unknown) {
+      const msg =
+        err &&
+        typeof err === "object" &&
+        "response" in err &&
+        err.response &&
+        typeof err.response === "object" &&
+        "data" in err.response &&
+        err.response.data &&
+        typeof err.response.data === "object" &&
+        "msg" in err.response.data &&
+        typeof err.response.data.msg === "string"
+          ? err.response.data.msg
+          : "Erro ao salvar. Verifique os valores (mín. R$ 5,00 em produção).";
+      setSettingsMessage(msg);
     } finally {
       setSavingSettings(false);
     }
@@ -101,6 +114,9 @@ export default function FinanceiroPage() {
             <p className="text-xs text-gray-500 mt-1 leading-relaxed">
               Altere para campanhas ou testes em produção. Checkouts pendentes com preço antigo são
               invalidados automaticamente.
+              {settings?.asaasMinCharge != null && !settings.asaasSandbox && (
+                <> Mínimo Asaas produção: {formatCurrency(settings.asaasMinCharge)}.</>
+              )}
               {settings?.updatedAt && (
                 <> Última alteração: {formatDateBR(settings.updatedAt)}.</>
               )}
