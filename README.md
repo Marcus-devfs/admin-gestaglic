@@ -54,5 +54,5 @@ VERCEL_ANALYTICS_URL=https://vercel.com/seu-time/gestaglic/analytics
 
 - **Usuárias:** total e novos cadastros (7 dias)
 - **Infra:** documentos MongoDB, uso estimado vs 512MB M0, link Vercel Analytics
-- **Financeiro:** Pix R$ 9,90 gerados vs pagos, receita
+- **Financeiro:** pagamentos premium (R$ 14,90) gerados vs pagos, receita
 - **Notificações:** lembretes ativos e dispositivos push
