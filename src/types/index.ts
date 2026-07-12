@@ -156,3 +156,24 @@ export interface ForumReport {
   postId: { title: string; category: string };
   createdAt: string;
 }
+
+export interface FeedbackItem {
+  _id: string;
+  userId: { _id: string; name: string; email: string } | string;
+  category: "feedback" | "help" | "bug";
+  message: string;
+  status: "open" | "read" | "resolved";
+  createdAt: string;
+}
+
+export interface LpMetrics {
+  days: number;
+  pageViews: number;
+  uniqueSessions: number;
+  ctaClicks: number;
+  conversionRate: number;
+  byDay: { date: string; pageViews: number; ctaClicks: number }[];
+  bySource: { source: string; pageViews: number; uniqueSessions: number }[];
+  topPaths: { path: string; count: number }[];
+  byEvent: { event: string; count: number }[];
+}

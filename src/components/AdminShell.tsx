@@ -11,6 +11,8 @@ import {
   LogOut,
   FileText,
   MessageSquare,
+  Inbox,
+  Globe,
 } from "lucide-react";
 import { APP_ICON, APP_NAME } from "@/lib/brand";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,9 +20,11 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/lp", label: "Landing", icon: Globe },
   { href: "/usuarios", label: "Usuários", icon: Users },
   { href: "/conteudo", label: "Conteúdo", icon: FileText },
   { href: "/comunidade", label: "Comunidade", icon: MessageSquare },
+  { href: "/feedback", label: "Feedback", icon: Inbox },
   { href: "/assinaturas", label: "Financeiro", icon: CreditCard },
   { href: "/notificacoes", label: "Notificações", icon: Bell },
 ];
