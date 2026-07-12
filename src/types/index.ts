@@ -14,6 +14,12 @@ export interface FinancialSummary {
   premiumUsers: number;
 }
 
+export interface PremiumSettings {
+  premiumPrice: number;
+  freePdfLimit: number;
+  updatedAt?: string;
+}
+
 export interface DashboardMetrics {
   users: { total: number; newLast7Days: number };
   infra: {

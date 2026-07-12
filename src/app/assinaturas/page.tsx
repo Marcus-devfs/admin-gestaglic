@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ArrowDownCircle,
   Clock,
   DollarSign,
   Percent,
+  Settings2,
   TrendingUp,
   Users,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { MetricCard } from "@/components/MetricCard";
 import { formatCurrency, formatDateBR } from "@/lib/utils";
-import type { FinancialSummary, PixPayment } from "@/types";
+import type { FinancialSummary, PixPayment, PremiumSettings } from "@/types";
 
 function methodLabel(method?: string) {
   if (method === "card") return "Cartão";
@@ -22,20 +23,52 @@ function methodLabel(method?: string) {
 export default function FinanceiroPage() {
   const [summary, setSummary] = useState<FinancialSummary | null>(null);
   const [payments, setPayments] = useState<PixPayment[]>([]);
+  const [settings, setSettings] = useState<PremiumSettings | null>(null);
+  const [priceInput, setPriceInput] = useState("");
+  const [freeLimitInput, setFreeLimitInput] = useState("");
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "paid" | "pending">("all");
 
-  useEffect(() => {
-    Promise.all([
+  const loadData = useCallback(() => {
+    return Promise.all([
       api.get<FinancialSummary>("/admin/financial/summary"),
       api.get<PixPayment[]>("/admin/payments"),
-    ])
-      .then(([summaryRes, paymentsRes]) => {
-        setSummary(summaryRes.data);
-        setPayments(paymentsRes.data);
-      })
-      .finally(() => setLoading(false));
+      api.get<PremiumSettings>("/admin/settings/premium"),
+    ]).then(([summaryRes, paymentsRes, settingsRes]) => {
+      setSummary(summaryRes.data);
+      setPayments(paymentsRes.data);
+      setSettings(settingsRes.data);
+      setPriceInput(String(settingsRes.data.premiumPrice));
+      setFreeLimitInput(String(settingsRes.data.freePdfLimit));
+    });
   }, []);
+
+  useEffect(() => {
+    loadData().finally(() => setLoading(false));
+  }, [loadData]);
+
+  const saveSettings = async () => {
+    setSavingSettings(true);
+    setSettingsMessage("");
+    try {
+      const { data } = await api.patch<PremiumSettings>("/admin/settings/premium", {
+        premiumPrice: Number(priceInput.replace(",", ".")),
+        freePdfLimit: Number(freeLimitInput),
+      });
+      setSettings(data);
+      setPriceInput(String(data.premiumPrice));
+      setFreeLimitInput(String(data.freePdfLimit));
+      const summaryRes = await api.get<FinancialSummary>("/admin/financial/summary");
+      setSummary(summaryRes.data);
+      setSettingsMessage("Salvo! Novos checkouts Pix e cartão usarão estes valores.");
+    } catch {
+      setSettingsMessage("Erro ao salvar. Verifique os valores informados.");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   const filtered = payments.filter((p) => {
     if (filter === "paid") return p.status === "paid";
@@ -57,6 +90,63 @@ export default function FinanceiroPage() {
           Pagamentos Asaas · preço atual {formatCurrency(summary.pixPrice)} (pagamento único)
         </p>
       </div>
+
+      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50">
+            <Settings2 className="h-5 w-5 text-brand-600" />
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900">Preço premium (pagamento único)</h2>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Altere para campanhas ou testes em produção. Checkouts pendentes com preço antigo são
+              invalidados automaticamente.
+              {settings?.updatedAt && (
+                <> Última alteração: {formatDateBR(settings.updatedAt)}.</>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 max-w-xl">
+          <label className="block">
+            <span className="text-xs font-medium text-gray-600">Valor (R$)</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              value={priceInput}
+              onChange={(e) => setPriceInput(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
+              placeholder="14.90"
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs font-medium text-gray-600">PDFs grátis antes do paywall</span>
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={freeLimitInput}
+              onChange={(e) => setFreeLimitInput(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
+            />
+          </label>
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={saveSettings}
+            disabled={savingSettings}
+            className="rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+          >
+            {savingSettings ? "Salvando..." : "Salvar configurações"}
+          </button>
+          {settingsMessage && (
+            <p className="text-xs text-gray-600">{settingsMessage}</p>
+          )}
+        </div>
+      </section>
 
       <section>
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
