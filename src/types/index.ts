@@ -23,7 +23,15 @@ export interface PremiumSettings {
 }
 
 export interface DashboardMetrics {
-  users: { total: number; newLast7Days: number };
+  chartDays: number;
+  users: { total: number; newLast7Days: number; premium: number };
+  activityByDay: {
+    date: string;
+    newUsers: number;
+    medicoes: number;
+    logins: number;
+    registrations: number;
+  }[];
   infra: {
     totalDocuments: number;
     users: number;
@@ -170,12 +178,41 @@ export interface FeedbackItem {
 
 export interface LpMetrics {
   days: number;
+  from: string;
+  to: string;
   pageViews: number;
   uniqueSessions: number;
   ctaClicks: number;
   conversionRate: number;
-  byDay: { date: string; pageViews: number; ctaClicks: number }[];
+  byDay: { date: string; pageViews: number; ctaClicks: number; uniqueSessions: number }[];
   bySource: { source: string; pageViews: number; uniqueSessions: number }[];
   topPaths: { path: string; count: number }[];
   byEvent: { event: string; count: number }[];
+  topSessions: {
+    sessionId: string;
+    pageViews: number;
+    ctaClicks: number;
+    events: number;
+    utmSource: string;
+    utmCampaign: string;
+    firstSeen: string;
+    lastSeen: string;
+  }[];
+  availableSources: string[];
+  filters: {
+    utmSource: string | null;
+    event: string | null;
+    sessionId: string | null;
+    path: string | null;
+  };
+}
+
+export interface LpMetricsQuery {
+  days?: number;
+  from?: string;
+  to?: string;
+  utmSource?: string;
+  event?: string;
+  sessionId?: string;
+  path?: string;
 }
