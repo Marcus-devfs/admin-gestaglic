@@ -31,7 +31,17 @@ export default function DashboardPage() {
     setLoading(true);
     api
       .get<DashboardMetrics>(`/admin/dashboard?days=${days}`)
-      .then(({ data }) => setMetrics(data))
+      .then(({ data }) =>
+        setMetrics({
+          ...data,
+          chartDays: data.chartDays ?? days,
+          activityByDay: data.activityByDay ?? [],
+          users: {
+            ...data.users,
+            premium: data.users?.premium ?? data.financial?.premiumUsers ?? 0,
+          },
+        })
+      )
       .catch(() => setMetrics(null))
       .finally(() => setLoading(false));
   }, [days]);
@@ -48,8 +58,9 @@ export default function DashboardPage() {
     return <p className="text-sm text-red-500">Erro ao carregar dashboard.</p>;
   }
 
-  const periodMedicoes = metrics.activityByDay.reduce((sum, d) => sum + d.medicoes, 0);
-  const periodLogins = metrics.activityByDay.reduce((sum, d) => sum + d.logins, 0);
+  const activityByDay = metrics.activityByDay ?? [];
+  const periodMedicoes = activityByDay.reduce((sum, d) => sum + d.medicoes, 0);
+  const periodLogins = activityByDay.reduce((sum, d) => sum + d.logins, 0);
 
   return (
     <div className="space-y-8 max-w-6xl">
@@ -108,7 +119,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {metrics.activityByDay.length > 0 && (
+      {activityByDay.length > 0 && (
         <section className="rounded-xl bg-white border border-gray-100 p-5">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <h2 className="text-sm font-semibold text-gray-700">Atividade no app</h2>
@@ -116,7 +127,7 @@ export default function DashboardPage() {
               {periodLogins} logins · {periodMedicoes} medições nos últimos {days} dias
             </p>
           </div>
-          <DashboardActivityChart data={metrics.activityByDay} />
+          <DashboardActivityChart data={activityByDay} />
         </section>
       )}
 
