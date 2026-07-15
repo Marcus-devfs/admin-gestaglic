@@ -186,6 +186,50 @@ export interface FeedbackCounts {
   total: number;
 }
 
+export type PushDeliveryType =
+  | "meal_reminder"
+  | "premium_activated"
+  | "payment_pending"
+  | "checkout_reminder"
+  | "generic";
+
+export type PushDeliveryStatus = "delivered" | "partial" | "failed" | "skipped";
+
+export interface PushDeliveryItem {
+  _id: string;
+  userId: { _id: string; name: string; email: string } | string;
+  type: PushDeliveryType;
+  title: string;
+  body: string;
+  url?: string | null;
+  status: PushDeliveryStatus;
+  devicesSent: number;
+  devicesFailed: number;
+  skipReason?: string | null;
+  meta?: {
+    period?: string | null;
+    slotId?: string | null;
+    paymentMethod?: string | null;
+    paymentId?: string | null;
+  };
+  createdAt: string;
+}
+
+export interface PushNotificationStats {
+  days: number;
+  total: number;
+  last24h: number;
+  byStatus: {
+    delivered: number;
+    partial: number;
+    failed: number;
+    skipped: number;
+  };
+  byType: Record<string, number>;
+  devicesSent: number;
+  devicesFailed: number;
+}
+
 export interface LpMetrics {
   days: number;
   from: string;
