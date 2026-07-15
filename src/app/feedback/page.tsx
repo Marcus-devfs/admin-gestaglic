@@ -38,6 +38,7 @@ export default function FeedbackAdminPage() {
 
   const updateStatus = async (id: string, status: FeedbackItem["status"]) => {
     await api.patch(`/admin/feedback/${id}`, { status });
+    window.dispatchEvent(new Event("admin-feedback-changed"));
     load();
   };
 

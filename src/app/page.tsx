@@ -11,8 +11,8 @@ import {
   Bell,
   Activity,
   Crown,
-  Globe,
   FileDown,
+  Inbox,
 } from "lucide-react";
 import { DashboardActivityChart } from "@/components/dashboard/DashboardActivityChart";
 import { api } from "@/lib/api";
@@ -193,13 +193,17 @@ export default function DashboardPage() {
             sub="Push habilitado"
             icon={Bell}
           />
-          <Link href="/lp">
+          <Link href="/feedback">
             <MetricCard
-              label="Landing page"
-              value="→"
-              sub="Métricas gestaglic.com.br"
-              icon={Globe}
-              accent="blue"
+              label="Feedbacks novos"
+              value={metrics.feedback?.open ?? 0}
+              sub={
+                (metrics.feedback?.open ?? 0) === 1
+                  ? "1 mensagem aguardando"
+                  : `${metrics.feedback?.open ?? 0} mensagens aguardando`
+              }
+              icon={Inbox}
+              accent={(metrics.feedback?.open ?? 0) > 0 ? "amber" : "blue"}
             />
           </Link>
         </div>
@@ -260,6 +264,16 @@ export default function DashboardPage() {
           className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-brand-200 hover:text-brand-700"
         >
           Usuárias →
+        </Link>
+        <Link
+          href="/feedback"
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-brand-200 hover:text-brand-700"
+        >
+          Feedback
+          {(metrics.feedback?.open ?? 0) > 0
+            ? ` (${metrics.feedback?.open} novos)`
+            : ""}{" "}
+          →
         </Link>
         <Link
           href="/notificacoes"

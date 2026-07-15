@@ -67,6 +67,9 @@ export interface DashboardMetrics {
     enabled: number;
     pushSubscriptions: number;
   };
+  feedback?: {
+    open: number;
+  };
 }
 
 export interface AdminUser {
@@ -174,6 +177,13 @@ export interface FeedbackItem {
   message: string;
   status: "open" | "read" | "resolved";
   createdAt: string;
+}
+
+export interface FeedbackCounts {
+  open: number;
+  read: number;
+  resolved: number;
+  total: number;
 }
 
 export interface LpMetrics {
