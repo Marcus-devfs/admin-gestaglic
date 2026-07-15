@@ -270,3 +270,23 @@ export interface LpMetricsQuery {
   sessionId?: string;
   path?: string;
 }
+
+export type AnnouncementKind = "feature" | "campaign" | "info";
+export type AnnouncementAudience = "all" | "free" | "premium";
+
+export interface Announcement {
+  _id: string;
+  title: string;
+  body: string;
+  kind: AnnouncementKind;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  audience: AnnouncementAudience;
+  active: boolean;
+  priority: number;
+  startsAt?: string | null;
+  endsAt?: string | null;
+  publishedAt?: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}

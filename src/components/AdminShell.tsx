@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Inbox,
   Globe,
+  Megaphone,
 } from "lucide-react";
 import { APP_ICON, APP_NAME } from "@/lib/brand";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,6 +26,7 @@ const NAV = [
   { href: "/lp", label: "Landing", icon: Globe },
   { href: "/usuarios", label: "Usuários", icon: Users },
   { href: "/conteudo", label: "Conteúdo", icon: FileText },
+  { href: "/novidades", label: "Novidades", icon: Megaphone },
   { href: "/comunidade", label: "Comunidade", icon: MessageSquare },
   { href: "/feedback", label: "Feedback", icon: Inbox, badgeKey: "feedback" as const },
   { href: "/assinaturas", label: "Financeiro", icon: CreditCard },
